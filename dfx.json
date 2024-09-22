@@ -1,0 +1,19 @@
+{
+  "canisters": {
+    "time_capsule_backend": {
+      "candid": "src/time_capsule_backend/time_capsule_backend.did",
+      "package": "time_capsule_backend",
+      "type": "rust"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "build": {
+    "args": "--target wasm32-unknown-unknown --release"
+  },
+  "version": 1
+}

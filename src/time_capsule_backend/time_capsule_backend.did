@@ -1,0 +1,12 @@
+type TimeCapsule = record {
+    owner: text;
+    message: text;
+    unlock_time: nat64;
+};
+
+service : {
+    create_time_capsule: (text, text, nat64) -> (nat64);
+    get_time_capsule: (nat64) -> (opt TimeCapsule) query;
+    list_available_capsules: () -> (vec record { nat64; TimeCapsule }) query;
+    greet: (text) -> (text) query;
+}
