@@ -1,61 +1,111 @@
-# `time_capsule`
+# Time Capsule Smart Contract
 
-Welcome to your new `time_capsule` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+## Overview
 
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
+The Time Capsule Smart Contract is a decentralized application (dApp) built on the Internet Computer Protocol (ICP). It allows users to create digital time capsules, storing messages that can only be accessed after a specified future date.
 
-To learn more before you start working with `time_capsule`, see the following documentation available online:
+## Features
 
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Rust Canister Development Guide](https://internetcomputer.org/docs/current/developer-docs/backend/rust/)
-- [ic-cdk](https://docs.rs/ic-cdk)
-- [ic-cdk-macros](https://docs.rs/ic-cdk-macros)
-- [Candid Introduction](https://internetcomputer.org/docs/current/developer-docs/backend/candid/)
+- Create time capsules with customizable unlock times
+- Retrieve time capsules once they've reached their unlock time
+- List all currently available (unlocked) time capsules
 
-If you want to start working on your project right away, you might want to try the following commands:
+## Prerequisites
 
-```bash
-cd time_capsule/
-dfx help
-dfx canister --help
+Before you begin, ensure you have the following installed:
+- [dfx](https://internetcomputer.org/docs/current/developer-docs/build/install-upgrade-remove) (version 0.23.0 or later)
+- [Rust](https://www.rust-lang.org/tools/install) (version 1.81.0 or later)
+- [cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html) (version 1.81.0 or later)
+
+## Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/Meenugpta/time_capsule_project.git
+   cd time_capsule_project
+   ```
+
+2. Install the required dependencies:
+   ```
+   npm install
+   ```
+
+3. Start the local Internet Computer replica:
+   ```
+   dfx start --background
+   ```
+
+4. Deploy the canister:
+   ```
+   dfx deploy
+   ```
+
+## Usage
+
+### Creating a Time Capsule
+
+To create a new time capsule:
+
+```
+dfx canister call time_capsule_backend create_time_capsule '("Owner Name", "Your message here", <unlock_timestamp>)'
 ```
 
-## Running the project locally
+Replace `<unlock_timestamp>` with the Unix timestamp when you want the capsule to be unlocked.
 
-If you want to test your project locally, you can use the following commands:
+### Retrieving a Time Capsule
 
-```bash
-# Starts the replica, running in the background
-dfx start --background
+To retrieve a time capsule (if it's unlocked):
 
-# Deploys your canisters to the replica and generates your candid interface
-dfx deploy
+```
+dfx canister call time_capsule_backend get_time_capsule '(<capsule_id>)'
 ```
 
-Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
+Replace `<capsule_id>` with the ID of the time capsule you want to retrieve.
 
-If you have made changes to your backend canister, you can generate a new candid interface with
+### Listing Available Capsules
 
-```bash
-npm run generate
+To list all currently unlocked capsules:
+
+```
+dfx canister call time_capsule_backend list_available_capsules
 ```
 
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
+## Project Structure
 
-If you are making frontend changes, you can start a development server with
+- `src/time_capsule_backend/`: Contains the Rust source code for the canister
+- `src/time_capsule_backend/time_capsule_backend.did`: Candid interface file
+- `dfx.json`: Project configuration file
 
-```bash
-npm start
+## Development
+
+To make changes to the smart contract:
+
+1. Modify the Rust code in `src/time_capsule_backend/src/lib.rs`
+2. Update the Candid interface in `src/time_capsule_backend/time_capsule_backend.did` if necessary
+3. Rebuild and redeploy the canister:
+   ```
+   dfx build
+   dfx canister install time_capsule_backend --mode upgrade
+   ```
+
+## Testing
+
+To run the test suite:
+
+```
+cargo test
 ```
 
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
+## Contributing
 
-### Note on frontend environment variables
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
+## License
 
-- set`DFX_NETWORK` to `ic` if you are using Webpack
-- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-  - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-- Write your own `createActor` constructor
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Internet Computer Documentation
+- Rust Programming Language
+- DFINITY Foundation
